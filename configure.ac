@@ -33,8 +33,8 @@ DPKG_WITH_DIR([logdir], [${localstatedir}/log],
               [system logging directory [LOCALSTATEDIR/log]])
 
 # Checks for programs.
-AC_PROG_CC
-AC_PROG_CXX
+AC_PROG_CC([clang gcc c99 cc])
+AC_PROG_CXX([clang++ g++ c++ cxx])
 AC_PROG_LEX
 DPKG_DIST_CHECK([test "$LEX" = ":"], [lex program required])
 AC_PROG_RANLIB
