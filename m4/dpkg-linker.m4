@@ -10,9 +10,13 @@ AC_DEFUN([DPKG_LINKER_OPTIMISATIONS],
     [],
     [enable_linker_optimisations=yes])
 
-  AS_IF([test "x$enable_linker_optimisations" = "xno"], [
+  AS_IF([test "x$enable_linker_optimisations" = "xno" ], [
     LDFLAGS=$(echo "$LDFLAGS" | sed -e "s/ -Wl,-O[[0-9]]*\b//g")
   ], [
-    LDFLAGS="$LDFLAGS -Wl,-O1"
+    case "$host_os" in
+        linux|linux-*)
+            LDFLAGS="$LDFLAGS -Wl,-O1"
+            ;;
+    esac
   ])
 ])
