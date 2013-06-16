@@ -39,6 +39,8 @@
 #  define OSFreeBSD
 #elif defined(__NetBSD__)
 #  define OSNetBSD
+#elif defined(__APPLE__)
+#  define OSDarwin
 #else
 #  error Unknown architecture - cannot build start-stop-daemon
 #endif
@@ -59,6 +61,10 @@
 #include <sys/proc.h>
 
 #include <err.h>
+#endif
+
+#if defined(OSDarwin)
+#include <libproc.h>
 #endif
 
 #ifdef HAVE_KVM_H
@@ -666,9 +672,10 @@ set_proc_schedule(struct res_schedule *sched)
 	struct sched_param param;
 
 	param.sched_priority = sched->priority;
-
+#ifndef OSDarwin
 	if (sched_setscheduler(getpid(), sched->policy, &param) == -1)
 		fatal("unable to set process scheduler");
+#endif
 #endif
 }
 
@@ -1070,6 +1077,23 @@ pid_is_exec(pid_t pid, const struct stat *esb)
 	return ((dev_t)pst.pst_text.psf_fsid.psfs_id == esb->st_dev &&
 	        (ino_t)pst.pst_text.psf_fileid == esb->st_ino);
 }
+#elif defined(OSDarwin)
+static bool
+pid_is_exec(pid_t pid, const struct stat *esb)
+{
+	char pathbuf[_POSIX_PATH_MAX];
+    struct stat sb;
+    
+    if(proc_pidpath(pid, pathbuf, sizeof(pathbuf)) < 0)
+    {
+        return false;
+    }
+    if(stat(pathbuf, &sb) != 0)
+    {
+        return false;
+    }
+    return (sb.st_dev == esb->st_dev && sb.st_ino == esb->st_ino);
+}
 #elif defined(HAVE_KVM_H)
 static bool
 pid_is_exec(pid_t pid, const struct stat *esb)
@@ -1147,6 +1171,18 @@ pid_is_user(pid_t pid, uid_t uid)
 	if (pstat_getproc(&pst, sizeof(pst), (size_t)0, (int)pid) < 0)
 		return false;
 	return ((uid_t)pst.pst_uid == uid);
+}
+#elif defined(OSDarwin)
+static bool
+pid_is_user(pid_t pid, uid_t uid)
+{
+    struct proc_bsdinfo info;
+    
+    if (proc_pidinfo(pid, PROC_PIDTBSDINFO, 0, &info, sizeof(info)) < 0)
+    {
+        return false;
+    }
+    return (info.pbi_ruid == uid);
 }
 #elif defined(HAVE_KVM_H)
 static bool
@@ -1237,6 +1273,18 @@ pid_is_cmd(pid_t pid, const char *name)
 	if (pstat_getproc(&pst, sizeof(pst), (size_t)0, (int)pid) < 0)
 		return false;
 	return (strcmp(pst.pst_ucomm, name) == 0);
+}
+#elif defined(OSDarwin)
+static bool
+pid_is_cmd(pid_t pid, const char *name)
+{
+	char pathbuf[_POSIX_PATH_MAX];
+    
+    if(proc_pidpath(pid, pathbuf, sizeof(pathbuf)) < 0)
+    {
+        return false;
+    }
+    return (strcmp(pathbuf, name) == 0);
 }
 #elif defined(HAVE_KVM_H)
 static bool
@@ -1399,6 +1447,13 @@ do_procinit(void)
 	}
 
 	return prog_status;
+}
+#elif defined(OSDarwin)
+static enum status_code
+do_procinit(void)
+{
+	/* Nothing to do. */
+	return status_unknown;
 }
 #elif defined(HAVE_KVM_H)
 static enum status_code
