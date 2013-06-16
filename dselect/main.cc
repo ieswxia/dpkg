@@ -21,6 +21,9 @@
  */
 
 #include <config.h>
+#include <cstdio>
+#include <cstdlib>
+#include <cstring>
 #include <compat.h>
 
 #include <sys/types.h>
@@ -38,8 +41,6 @@
 #include <fcntl.h>
 #include <dirent.h>
 #include <unistd.h>
-#include <stdlib.h>
-#include <stdio.h>
 
 // Solaris requires curses.h to be included before term.h
 #include "dselect-curses.h"

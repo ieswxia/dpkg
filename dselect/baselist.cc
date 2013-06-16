@@ -20,6 +20,9 @@
  */
 
 #include <config.h>
+#include <cstdio>
+#include <cstdlib>
+#include <cstring>
 #include <compat.h>
 
 #include <sys/ioctl.h>
@@ -27,9 +30,7 @@
 
 #include <assert.h>
 #include <ctype.h>
-#include <string.h>
 #include <unistd.h>
-#include <stdio.h>
 
 #include <dpkg/i18n.h>
 #include <dpkg/dpkg.h>

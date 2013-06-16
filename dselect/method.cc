@@ -20,6 +20,9 @@
  */
 
 #include <config.h>
+#include <cstdio>
+#include <cstdlib>
+#include <cstring>
 #include <compat.h>
 
 #include <sys/types.h>
@@ -31,13 +34,10 @@
 #include <errno.h>
 #include <limits.h>
 #include <ctype.h>
-#include <string.h>
 #include <fcntl.h>
 #include <dirent.h>
 #include <signal.h>
 #include <unistd.h>
-#include <stdlib.h>
-#include <stdio.h>
 
 #include <dpkg/i18n.h>
 #include <dpkg/dpkg.h>

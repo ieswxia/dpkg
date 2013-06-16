@@ -20,10 +20,12 @@
  */
 
 #include <config.h>
-#include <compat.h>
 
-#include <string.h>
-#include <stdio.h>
+#include <cstdio>
+#include <cstdlib>
+#include <cstring>
+
+#include <compat.h>
 
 #include <dpkg/i18n.h>
 #include <dpkg/dpkg.h>

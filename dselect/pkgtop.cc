@@ -19,12 +19,13 @@
  */
 
 #include <config.h>
+#include <cstdio>
+#include <cstdlib>
+#include <cstring>
 #include <compat.h>
 
 #include <assert.h>
 #include <ctype.h>
-#include <string.h>
-#include <stdio.h>
 
 #include <dpkg/i18n.h>
 #include <dpkg/dpkg.h>

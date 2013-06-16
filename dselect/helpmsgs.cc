@@ -19,6 +19,9 @@
  */
 
 #include <config.h>
+#include <cstdio>
+#include <cstdlib>
+#include <cstring>
 #include <compat.h>
 
 #include <dpkg/i18n.h>
