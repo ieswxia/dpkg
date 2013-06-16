@@ -14,7 +14,7 @@ AC_DEFUN([DPKG_COMPILER_WARNINGS],
 WFLAGS="-Wall -Wextra -Wno-unused-parameter -Wno-missing-field-initializers \
 	 -Wmissing-declarations -Wmissing-format-attribute \
 	 -Wformat-security -Wpointer-arith \
-	 -Wvla -Winit-self -Wwrite-strings -Wcast-align -Wshadow"
+	 -Winit-self -Wwrite-strings -Wcast-align -Wshadow"
 WCFLAGS="-Wdeclaration-after-statement -Wnested-externs -Wbad-function-cast \
 	 -Wstrict-prototypes -Wmissing-prototypes -Wold-style-definition"
 # Temporarily here until #542031 gets fixed in ncurses
